@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAFF Submission Process Quiz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f4f8;
+    color: #2d3748;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2E5984 100%);
+    color: white;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .header p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: -24px auto 40px;
+    padding: 0 16px;
+  }
+
+  .progress-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 8px;
+    z-index: 10;
+  }
+
+  .progress-bar .track {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-bar .fill {
+    background: linear-gradient(90deg, #2E5984, #4a90c4);
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-bar .label {
+    font-size: 13px;
+    color: #718096;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .name-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .name-card label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1B3A5C;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .name-card input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .name-card input:focus {
+    border-color: #2E5984;
+  }
+
+  .question-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s;
+  }
+
+  .question-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .question-card .q-number {
+    display: inline-block;
+    background: #2E5984;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    margin-bottom: 12px;
+  }
+
+  .question-card .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1B3A5C;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .option {
+    display: block;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 14px;
+    position: relative;
+  }
+
+  .option:hover {
+    border-color: #a0c4e8;
+    background: #f7fafc;
+  }
+
+  .option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .option.selected {
+    border-color: #2E5984;
+    background: #ebf4ff;
+  }
+
+  .option .letter {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #4a5568;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 12px;
+    transition: all 0.15s;
+    vertical-align: middle;
+  }
+
+  .option.selected .letter {
+    background: #2E5984;
+    color: white;
+  }
+
+  .option .option-text {
+    vertical-align: middle;
+  }
+
+  .open-ended textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+    line-height: 1.6;
+  }
+
+  .open-ended textarea:focus {
+    border-color: #2E5984;
+  }
+
+  .open-ended .hint {
+    font-size: 13px;
+    color: #718096;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  .submit-section {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2E5984 100%);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(27, 58, 92, 0.35);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .success-msg {
+    display: none;
+    background: #f0fff4;
+    border: 2px solid #68d391;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .success-msg h3 {
+    color: #276749;
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  .success-msg p {
+    color: #2f855a;
+    font-size: 15px;
+  }
+
+  .validation-note {
+    color: #e53e3e;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .copy-section {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 16px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .copy-section h3 {
+    color: #1B3A5C;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .copy-section p {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .copy-section textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+    outline: none;
+    background: #f7fafc;
+    margin-bottom: 12px;
+  }
+
+  .copy-btn {
+    background: #2E5984;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    margin-right: 8px;
+    transition: background 0.15s;
+  }
+
+  .copy-btn:hover { background: #1B3A5C; }
+
+  .email-btn {
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.15s;
+  }
+
+  .email-btn:hover { background: #38a169; }
+
+  @media (max-width: 600px) {
+    .header { padding: 32px 16px 28px; }
+    .header h1 { font-size: 22px; }
+    .question-card { padding: 20px; }
+    .container { padding: 0 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>TAFF Submission Process Quiz</h1>
+  <p>This quiz is designed to help our family foundation evaluate the current grant submission process and consider potential improvements. Your honest input matters!</p>
+</div>
+
+<div class="container">
+  <div class="progress-bar">
+    <div class="label">Progress: <span id="progressText">0 of 12</span></div>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+  </div>
+
+  <form id="quizForm">
+
+    <div class="name-card">
+      <label for="responderName">Your Name</label>
+      <input type="text" id="responderName" placeholder="Enter your name..." required>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-card" data-q="1">
+      <div class="q-number">1</div>
+      <div class="q-text">Which part of our grantmaking activities at TAFF do you appreciate participating in the MOST?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="A"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="B"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="C"><span class="letter">C</span><span class="option-text">Special grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="D"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="E"><span class="letter">E</span><span class="option-text">Group grants, like the international/domestic grants we did for this meeting</span></label>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card" data-q="2">
+      <div class="q-number">2</div>
+      <div class="q-text">Which part of our grantmaking activities at TAFF do you appreciate participating in the SECOND MOST?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="A"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="B"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="C"><span class="letter">C</span><span class="option-text">Special grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="D"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="E"><span class="letter">E</span><span class="option-text">Group grants</span></label>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card" data-q="3">
+      <div class="q-number">3</div>
+      <div class="q-text">Do you wish that TAFF had a narrower focus on specific topic areas (education, environment, etc), or do you prefer grantmaking flexibility?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="A"><span class="letter">A</span><span class="option-text">Prefer more intentional, streamlined focus</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="B"><span class="letter">B</span><span class="option-text">Love current mix</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="C"><span class="letter">C</span><span class="option-text">Would express this differently (please explain in Q12)</span></label>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card" data-q="4">
+      <div class="q-number">4</div>
+      <div class="q-text">Would formalizing our special grant submission process help us achieve greater impact or transparency?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="A"><span class="letter">A</span><span class="option-text">Yes</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="B"><span class="letter">B</span><span class="option-text">No</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="C"><span class="letter">C</span><span class="option-text">Not sure</span></label>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card" data-q="5">
+      <div class="q-number">5</div>
+      <div class="q-text">What's the most appropriate form of guidelines for special grants?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="A"><span class="letter">A</span><span class="option-text">Written guidelines available to the public</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="B"><span class="letter">B</span><span class="option-text">Written guidelines distributed privately by directors to potential grantees</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="C"><span class="letter">C</span><span class="option-text">Verbal instructions only</span></label>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-card" data-q="6">
+      <div class="q-number">6</div>
+      <div class="q-text">Should we have a longer timeline for reviewing and responding to grant requests?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="A"><span class="letter">A</span><span class="option-text">Yes, at least a month</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="B"><span class="letter">B</span><span class="option-text">Yes, more than a month</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="C"><span class="letter">C</span><span class="option-text">No, our current timeline (~two weeks) is good</span></label>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-card" data-q="7">
+      <div class="q-number">7</div>
+      <div class="q-text">In the future, should anyone besides family members be involved in the grant review process?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="A"><span class="letter">A</span><span class="option-text">No, family members only</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="B"><span class="letter">B</span><span class="option-text">Yes, staff and family</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="C"><span class="letter">C</span><span class="option-text">Yes, advisors or external consultants and family</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="D"><span class="letter">D</span><span class="option-text">Yes, both staff and advisors</span></label>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-card" data-q="8">
+      <div class="q-number">8</div>
+      <div class="q-text">Should we require specific documentation from applicants (e.g., budgets, impact statements)?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="A"><span class="letter">A</span><span class="option-text">Yes, this would be helpful</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="B"><span class="letter">B</span><span class="option-text">This might be helpful, depending on the project</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="C"><span class="letter">C</span><span class="option-text">No, it's good to be flexible</span></label>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-card" data-q="9">
+      <div class="q-number">9</div>
+      <div class="q-text">How should we communicate decisions to applicants?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="A"><span class="letter">A</span><span class="option-text">Formal letter or email</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="B"><span class="letter">B</span><span class="option-text">Phone call</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="C"><span class="letter">C</span><span class="option-text">In-person meeting</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="D"><span class="letter">D</span><span class="option-text">Other (please specify in Q12)</span></label>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-card" data-q="10">
+      <div class="q-number">10</div>
+      <div class="q-text">Should we provide feedback to applicants whose proposals were not funded?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="A"><span class="letter">A</span><span class="option-text">Yes, written feedback from staff or secretary</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="B"><span class="letter">B</span><span class="option-text">Yes, brief verbal feedback from the interested director</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="C"><span class="letter">C</span><span class="option-text">Other (please specify in Q12)</span></label>
+    </div>
+
+    <!-- Q11 - Grantee Reports -->
+    <div class="question-card" data-q="11">
+      <div class="q-number">11</div>
+      <div class="q-text">Should TAFF require grantees to provide follow-up reports on how funds were used?</div>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="A"><span class="letter">A</span><span class="option-text">Yes, detailed impact reports for all grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="B"><span class="letter">B</span><span class="option-text">Yes, but brief updates only (1 page or less)</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="C"><span class="letter">C</span><span class="option-text">Only for grants above a certain dollar amount</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="D"><span class="letter">D</span><span class="option-text">No -- a trust-based approach is better for our relationships</span></label>
+    </div>
+
+    <!-- Q12 - OPEN-ENDED -->
+    <div class="question-card open-ended" data-q="12">
+      <div class="q-number">12</div>
+      <div class="q-text">What other suggestions do you have to improve TAFF (crazy is fine)?</div>
+      <div class="hint">Share any ideas, big or small, for making TAFF better. There are no wrong answers here!</div>
+      <textarea name="q12_open" id="q12open" placeholder="Type your ideas here..."></textarea>
+    </div>
+
+    <div class="validation-note" id="validationNote">Please answer all multiple-choice questions and enter your name before submitting.</div>
+
+    <div class="submit-section">
+      <button type="button" class="submit-btn" onclick="submitQuiz()">Submit My Responses</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <h3>Thank you for your input!</h3>
+      <p>Your responses have been recorded. Use the options below to share them.</p>
+    </div>
+
+    <div class="copy-section" id="copySection">
+      <h3>Your Formatted Responses</h3>
+      <p>Copy the text below and paste it into an email, or click "Email Responses" to open your email client with everything pre-filled.</p>
+      <textarea id="responseSummary" readonly></textarea>
+      <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
+      <a class="email-btn" id="emailLink" href="#">Email Responses</a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const TOTAL_QUESTIONS = 12;
+const RECIPIENT_EMAIL = "dorothy@pilgrimafrica.org";
+
+const questionTexts = {
+  q1: "Which part of our grantmaking activities at TAFF do you appreciate participating in the MOST?",
+  q2: "Which part of our grantmaking activities at TAFF do you appreciate participating in the SECOND MOST?",
+  q3: "Do you wish that TAFF had a narrower focus on specific topic areas, or do you prefer grantmaking flexibility?",
+  q4: "Would formalizing our special grant submission process help us achieve greater impact or transparency?",
+  q5: "What's the most appropriate form of guidelines for special grants?",
+  q6: "Should we have a longer timeline for reviewing and responding to grant requests?",
+  q7: "In the future, should anyone besides family members be involved in the grant review process?",
+  q8: "Should we require specific documentation from applicants?",
+  q9: "How should we communicate decisions to applicants?",
+  q10: "Should we provide feedback to applicants whose proposals were not funded?",
+  q11: "Should TAFF require grantees to provide follow-up reports on how funds were used?",
+  q12: "What other suggestions do you have to improve TAFF (crazy is fine)?"
+};
+
+const optionTexts = {
+  q1:  { A: "Personal authority grants", B: "Matching grants", C: "Special grants", D: "Recurrent grants", E: "Group grants" },
+  q2:  { A: "Personal authority grants", B: "Matching grants", C: "Special grants", D: "Recurrent grants", E: "Group grants" },
+  q3:  { A: "Prefer more intentional, streamlined focus", B: "Love current mix", C: "Would express this differently" },
+  q4:  { A: "Yes", B: "No", C: "Not sure" },
+  q5:  { A: "Written guidelines available to the public", B: "Written guidelines distributed privately", C: "Verbal instructions only" },
+  q6:  { A: "Yes, at least a month", B: "Yes, more than a month", C: "No, current timeline is good" },
+  q7:  { A: "No, family members only", B: "Yes, staff and family", C: "Yes, advisors/consultants and family", D: "Yes, both staff and advisors" },
+  q8:  { A: "Yes, this would be helpful", B: "Depends on the project", C: "No, stay flexible" },
+  q9:  { A: "Formal letter or email", B: "Phone call", C: "In-person meeting", D: "Other" },
+  q10: { A: "Yes, written feedback from staff", B: "Yes, brief verbal feedback from director", C: "Other" },
+  q11: { A: "Detailed impact reports for all grants", B: "Brief updates only", C: "Only for grants above a threshold", D: "No, trust-based approach" },
+};
+
+function selectOption(label) {
+  const card = label.closest('.question-card');
+  card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  label.classList.add('selected');
+  label.querySelector('input').checked = true;
+  updateProgress();
+}
+
+function updateProgress() {
+  let answered = 0;
+  for (let i = 1; i <= 11; i++) {
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  if (document.getElementById('q12open').value.trim()) answered++;
+
+  document.getElementById('progressText').textContent = `${answered} of ${TOTAL_QUESTIONS}`;
+  document.getElementById('progressFill').style.width = `${(answered / TOTAL_QUESTIONS) * 100}%`;
+}
+
+document.getElementById('q12open').addEventListener('input', updateProgress);
+
+function submitQuiz() {
+  const name = document.getElementById('responderName').value.trim();
+
+  // Validate
+  let allAnswered = true;
+  for (let i = 1; i <= 11; i++) {
+    if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+      allAnswered = false;
+      break;
+    }
+  }
+
+  if (!allAnswered || !name) {
+    document.getElementById('validationNote').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  document.getElementById('validationNote').style.display = 'none';
+
+  // Build summary
+  let summary = `TAFF SUBMISSION PROCESS QUIZ\nResponses from: ${name}\nDate: ${new Date().toLocaleDateString()}\n`;
+  summary += "=".repeat(50) + "\n\n";
+
+  for (let i = 1; i <= 11; i++) {
+    const val = document.querySelector(`input[name="q${i}"]:checked`).value;
+    summary += `Q${i}. ${questionTexts["q" + i]}\n`;
+    summary += `   Answer: ${val}. ${optionTexts["q" + i][val]}\n\n`;
+  }
+
+  const openEnded = document.getElementById('q12open').value.trim() || "(No response)";
+  summary += `Q12. ${questionTexts.q12}\n`;
+  summary += `   Answer: ${openEnded}\n`;
+
+  document.getElementById('responseSummary').value = summary;
+  document.getElementById('successMsg').style.display = 'block';
+  document.getElementById('copySection').style.display = 'block';
+
+  // Build email link
+  const subject = encodeURIComponent(`TAFF Quiz Responses - ${name}`);
+  const body = encodeURIComponent(summary);
+  document.getElementById('emailLink').href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+
+  // Disable form
+  document.querySelectorAll('.option input, .submit-btn').forEach(el => el.disabled = true);
+  document.querySelector('.submit-btn').textContent = "Submitted";
+  document.getElementById('q12open').disabled = true;
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = 'Complete!';
+
+  document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyToClipboard() {
+  const textarea = document.getElementById('responseSummary');
+  textarea.select();
+  document.execCommand('copy');
+  const btn = document.querySelector('.copy-btn');
+  btn.textContent = 'Copied!';
+  setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+}
+</script>
+</body>
+</html>
