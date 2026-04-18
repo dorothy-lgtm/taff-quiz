@@ -43,17 +43,33 @@
     padding: 0 16px;
   }
 
+  .question-counter {
+    text-align: center;
+    font-size: 13px;
+    color: #718096;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 8px 0 12px;
+  }
+
   .question-card {
     background: white;
     border-radius: 12px;
     padding: 28px 32px;
     margin-bottom: 16px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    transition: box-shadow 0.2s;
+    display: none;
   }
 
-  .question-card:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  .question-card.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .question-card .q-number {
@@ -155,39 +171,75 @@
     border-color: #2E5984;
   }
 
-  .open-ended .hint {
+  .open-ended .hint,
+  .question-card .hint {
     font-size: 13px;
     color: #718096;
     font-style: italic;
     margin-bottom: 12px;
   }
 
-  .submit-section {
-    text-align: center;
-    padding: 20px 0 40px;
+  /* Navigation buttons */
+  .nav-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 20px;
+  }
+
+  .nav-btn {
+    background: white;
+    color: #2E5984;
+    border: 2px solid #2E5984;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    min-width: 120px;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: #ebf4ff;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.primary {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2E5984 100%);
+    color: white;
+    border: none;
+  }
+
+  .nav-btn.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(27, 58, 92, 0.35);
   }
 
   .submit-btn {
     background: linear-gradient(135deg, #1B3A5C 0%, #2E5984 100%);
     color: white;
     border: none;
-    padding: 16px 48px;
-    font-size: 16px;
+    padding: 12px 32px;
+    font-size: 15px;
     font-weight: 600;
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
     font-family: inherit;
     letter-spacing: 0.3px;
+    min-width: 120px;
   }
 
-  .submit-btn:hover {
+  .submit-btn:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(27, 58, 92, 0.35);
-  }
-
-  .submit-btn:active {
-    transform: translateY(0);
   }
 
   .submit-btn:disabled {
@@ -222,7 +274,7 @@
     color: #e53e3e;
     font-size: 13px;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: none;
   }
 
@@ -230,14 +282,10 @@
     text-align: center;
     font-size: 13px;
     color: #718096;
-    margin-top: 16px;
+    margin-top: 8px;
     padding: 12px 20px;
     background: #edf2f7;
     border-radius: 8px;
-  }
-
-  .copy-section {
-    display: none;
   }
 
   @media (max-width: 600px) {
@@ -245,6 +293,7 @@
     .header h1 { font-size: 22px; }
     .question-card { padding: 20px; }
     .container { padding: 0 10px; }
+    .nav-btn, .submit-btn { padding: 12px 20px; min-width: 100px; font-size: 14px; }
   }
 </style>
 </head>
@@ -257,6 +306,8 @@
 
 <div class="container">
   <form id="quizForm" action="https://formspree.io/f/xojywdwj" method="POST">
+
+    <div class="question-counter" id="questionCounter">Question 1 of 12</div>
 
     <!-- Q1 -->
     <div class="question-card" data-q="1">
@@ -381,10 +432,12 @@
     <!-- Subject line for the email Formspree sends -->
     <input type="hidden" name="_subject" value="New TAFF Quiz Response">
 
-    <div class="validation-note" id="validationNote">Please answer all multiple-choice questions before submitting.</div>
+    <div class="validation-note" id="validationNote">Please answer this question before continuing.</div>
 
-    <div class="submit-section">
-      <button type="submit" class="submit-btn" id="submitBtn">Submit My Responses</button>
+    <div class="nav-section">
+      <button type="button" class="nav-btn" id="prevBtn" disabled>← Previous</button>
+      <button type="button" class="nav-btn primary" id="nextBtn">Next →</button>
+      <button type="submit" class="submit-btn" id="submitBtn" style="display:none;">Submit</button>
     </div>
 
     <div class="anonymous-note">Your submission is fully anonymous. No name, email address, or identifying information is collected.</div>
@@ -400,8 +453,53 @@
 <script>
 const form = document.getElementById('quizForm');
 const submitBtn = document.getElementById('submitBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 const validationNote = document.getElementById('validationNote');
 const successMsg = document.getElementById('successMsg');
+const questionCounter = document.getElementById('questionCounter');
+const questionCards = document.querySelectorAll('.question-card');
+const totalQuestions = questionCards.length;
+
+let currentIndex = 0;
+
+// Show the question at the given index
+function showQuestion(index) {
+  questionCards.forEach((card, i) => {
+    card.classList.toggle('active', i === index);
+  });
+  questionCounter.textContent = `Question ${index + 1} of ${totalQuestions}`;
+
+  // Update nav buttons
+  prevBtn.disabled = index === 0;
+  if (index === totalQuestions - 1) {
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'inline-block';
+  } else {
+    nextBtn.style.display = 'inline-block';
+    submitBtn.style.display = 'none';
+  }
+
+  validationNote.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Check whether the current question is answered
+function isCurrentAnswered() {
+  const card = questionCards[currentIndex];
+  const qNum = card.getAttribute('data-q');
+
+  // Q12 is open-ended and optional
+  if (qNum === '12') return true;
+
+  // Q7 is checkbox — at least one must be checked
+  if (card.getAttribute('data-type') === 'checkbox') {
+    return document.querySelectorAll(`input[name="q${qNum}"]:checked`).length > 0;
+  }
+
+  // All others are radios
+  return !!document.querySelector(`input[name="q${qNum}"]:checked`);
+}
 
 // Handle radio option selection (visual styling)
 function selectOption(label) {
@@ -409,11 +507,11 @@ function selectOption(label) {
   card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   label.classList.add('selected');
   label.querySelector('input').checked = true;
+  validationNote.style.display = 'none';
 }
 
 // Handle checkbox option toggle (visual styling + allows multiple)
 function toggleCheckbox(label, event) {
-  // If the user clicked directly on the input (native checkbox), don't toggle again
   if (event && event.target.tagName === 'INPUT') {
     label.classList.toggle('selected', label.querySelector('input').checked);
     return;
@@ -422,31 +520,54 @@ function toggleCheckbox(label, event) {
   const input = label.querySelector('input');
   input.checked = !input.checked;
   label.classList.toggle('selected', input.checked);
+  validationNote.style.display = 'none';
 }
+
+// Next button
+nextBtn.addEventListener('click', function() {
+  if (!isCurrentAnswered()) {
+    validationNote.style.display = 'block';
+    return;
+  }
+  if (currentIndex < totalQuestions - 1) {
+    currentIndex++;
+    showQuestion(currentIndex);
+  }
+});
+
+// Previous button
+prevBtn.addEventListener('click', function() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    showQuestion(currentIndex);
+  }
+});
 
 // Submit handler
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
   validationNote.style.display = 'none';
 
-  // Validate: all 11 multiple-choice questions must be answered
-  // Q1-Q6, Q8-Q11 are radios; Q7 is a checkbox group (needs at least one checked)
-  let allAnswered = true;
+  // Validate all required questions across the form
+  let firstUnansweredIndex = -1;
   const radioQuestions = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11];
   for (const i of radioQuestions) {
     if (!document.querySelector(`input[name="q${i}"]:checked`)) {
-      allAnswered = false;
-      break;
+      const idx = Array.from(questionCards).findIndex(c => c.getAttribute('data-q') === String(i));
+      if (firstUnansweredIndex === -1) firstUnansweredIndex = idx;
     }
   }
-  if (allAnswered) {
-    const q7Checked = document.querySelectorAll('input[name="q7"]:checked');
-    if (q7Checked.length === 0) allAnswered = false;
+  const q7Checked = document.querySelectorAll('input[name="q7"]:checked');
+  if (q7Checked.length === 0) {
+    const idx = Array.from(questionCards).findIndex(c => c.getAttribute('data-q') === '7');
+    if (firstUnansweredIndex === -1) firstUnansweredIndex = idx;
   }
 
-  if (!allAnswered) {
+  if (firstUnansweredIndex !== -1) {
+    currentIndex = firstUnansweredIndex;
+    showQuestion(currentIndex);
+    validationNote.textContent = 'Please answer this question before submitting.';
     validationNote.style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
@@ -462,7 +583,7 @@ form.addEventListener('submit', async function(e) {
     });
 
     if (response.ok) {
-      form.querySelectorAll('.question-card, .submit-section, .anonymous-note, .validation-note').forEach(el => {
+      form.querySelectorAll('.question-card, .nav-section, .anonymous-note, .validation-note, .question-counter').forEach(el => {
         el.style.display = 'none';
       });
       successMsg.style.display = 'block';
@@ -473,15 +594,18 @@ form.addEventListener('submit', async function(e) {
       validationNote.textContent = msg;
       validationNote.style.display = 'block';
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit My Responses';
+      submitBtn.textContent = 'Submit';
     }
   } catch (err) {
     validationNote.textContent = 'Network error. Please check your connection and try again.';
     validationNote.style.display = 'block';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit My Responses';
+    submitBtn.textContent = 'Submit';
   }
 });
+
+// Initialize — show first question
+showQuestion(0);
 </script>
 </body>
 </html>
