@@ -43,70 +43,6 @@
     padding: 0 16px;
   }
 
-  .progress-bar {
-    background: white;
-    border-radius: 12px;
-    padding: 16px 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    position: sticky;
-    top: 8px;
-    z-index: 10;
-  }
-
-  .progress-bar .track {
-    background: #e2e8f0;
-    border-radius: 8px;
-    height: 8px;
-    overflow: hidden;
-  }
-
-  .progress-bar .fill {
-    background: linear-gradient(90deg, #2E5984, #4a90c4);
-    height: 100%;
-    border-radius: 8px;
-    transition: width 0.4s ease;
-    width: 0%;
-  }
-
-  .progress-bar .label {
-    font-size: 13px;
-    color: #718096;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .name-card {
-    background: white;
-    border-radius: 12px;
-    padding: 28px 32px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  }
-
-  .name-card label {
-    font-size: 15px;
-    font-weight: 600;
-    color: #1B3A5C;
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .name-card input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-
-  .name-card input:focus {
-    border-color: #2E5984;
-  }
-
   .question-card {
     background: white;
     border-radius: 12px;
@@ -159,7 +95,8 @@
     background: #f7fafc;
   }
 
-  .option input[type="radio"] {
+  .option input[type="radio"],
+  .option input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     width: 0;
@@ -169,6 +106,10 @@
   .option.selected {
     border-color: #2E5984;
     background: #ebf4ff;
+  }
+
+  .option.checkbox .letter {
+    border-radius: 6px;
   }
 
   .option .letter {
@@ -285,73 +226,19 @@
     display: none;
   }
 
+  .anonymous-note {
+    text-align: center;
+    font-size: 13px;
+    color: #718096;
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: #edf2f7;
+    border-radius: 8px;
+  }
+
   .copy-section {
     display: none;
-    background: white;
-    border-radius: 12px;
-    padding: 28px 32px;
-    margin: 16px 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
-
-  .copy-section h3 {
-    color: #1B3A5C;
-    margin-bottom: 8px;
-    font-size: 16px;
-  }
-
-  .copy-section p {
-    color: #718096;
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
-
-  .copy-section textarea {
-    width: 100%;
-    min-height: 200px;
-    padding: 14px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: 'Courier New', monospace;
-    resize: vertical;
-    outline: none;
-    background: #f7fafc;
-    margin-bottom: 12px;
-  }
-
-  .copy-btn {
-    background: #2E5984;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: inherit;
-    margin-right: 8px;
-    transition: background 0.15s;
-  }
-
-  .copy-btn:hover { background: #1B3A5C; }
-
-  .email-btn {
-    background: #48bb78;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: inherit;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.15s;
-  }
-
-  .email-btn:hover { background: #38a169; }
 
   @media (max-width: 600px) {
     .header { padding: 32px 16px 28px; }
@@ -369,122 +256,115 @@
 </div>
 
 <div class="container">
-  <div class="progress-bar">
-    <div class="label">Progress: <span id="progressText">0 of 12</span></div>
-    <div class="track"><div class="fill" id="progressFill"></div></div>
-  </div>
-
-  <form id="quizForm">
-
-    <div class="name-card">
-      <label for="responderName">Your Name</label>
-      <input type="text" id="responderName" placeholder="Enter your name..." required>
-    </div>
+  <form id="quizForm" action="https://formspree.io/f/xojywdwj" method="POST">
 
     <!-- Q1 -->
     <div class="question-card" data-q="1">
       <div class="q-number">1</div>
       <div class="q-text">Which part of our grantmaking activities at TAFF do you appreciate participating in the MOST?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="A"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="B"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="C"><span class="letter">C</span><span class="option-text">Special grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="D"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="E"><span class="letter">E</span><span class="option-text">Group grants, like the international/domestic grants we did for this meeting</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Personal authority grants"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Matching grants"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Special grants"><span class="letter">C</span><span class="option-text">Special grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Recurrent grants"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Group grants, like the international/domestic grants we did for this meeting"><span class="letter">E</span><span class="option-text">Group grants, like the international/domestic grants we did for this meeting</span></label>
     </div>
 
     <!-- Q2 -->
     <div class="question-card" data-q="2">
       <div class="q-number">2</div>
       <div class="q-text">Which part of our grantmaking activities at TAFF do you appreciate participating in the SECOND MOST?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="A"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="B"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="C"><span class="letter">C</span><span class="option-text">Special grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="D"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="E"><span class="letter">E</span><span class="option-text">Group grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="Personal authority grants"><span class="letter">A</span><span class="option-text">Personal authority grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="Matching grants"><span class="letter">B</span><span class="option-text">Matching grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="Special grants"><span class="letter">C</span><span class="option-text">Special grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="Recurrent grants"><span class="letter">D</span><span class="option-text">Recurrent grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q2" value="Group grants"><span class="letter">E</span><span class="option-text">Group grants</span></label>
     </div>
 
     <!-- Q3 -->
     <div class="question-card" data-q="3">
       <div class="q-number">3</div>
       <div class="q-text">Do you wish that TAFF had a narrower focus on specific topic areas (education, environment, etc), or do you prefer grantmaking flexibility?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="A"><span class="letter">A</span><span class="option-text">Prefer more intentional, streamlined focus</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="B"><span class="letter">B</span><span class="option-text">Love current mix</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="C"><span class="letter">C</span><span class="option-text">Would express this differently (please explain in Q12)</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="Prefer more intentional, streamlined focus"><span class="letter">A</span><span class="option-text">Prefer more intentional, streamlined focus</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="Love current mix"><span class="letter">B</span><span class="option-text">Love current mix</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q3" value="Would express this differently (please explain in Q12)"><span class="letter">C</span><span class="option-text">Would express this differently (please explain in Q12)</span></label>
     </div>
 
     <!-- Q4 -->
     <div class="question-card" data-q="4">
       <div class="q-number">4</div>
       <div class="q-text">Would formalizing our special grant submission process help us achieve greater impact or transparency?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="A"><span class="letter">A</span><span class="option-text">Yes</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="B"><span class="letter">B</span><span class="option-text">No</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="C"><span class="letter">C</span><span class="option-text">Not sure</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="Yes"><span class="letter">A</span><span class="option-text">Yes</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="No"><span class="letter">B</span><span class="option-text">No</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q4" value="Not sure"><span class="letter">C</span><span class="option-text">Not sure</span></label>
     </div>
 
     <!-- Q5 -->
     <div class="question-card" data-q="5">
       <div class="q-number">5</div>
       <div class="q-text">What's the most appropriate form of guidelines for special grants?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="A"><span class="letter">A</span><span class="option-text">Written guidelines available to the public</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="B"><span class="letter">B</span><span class="option-text">Written guidelines distributed privately by directors to potential grantees</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="C"><span class="letter">C</span><span class="option-text">Verbal instructions only</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="Written guidelines available to the public"><span class="letter">A</span><span class="option-text">Written guidelines available to the public</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="Written guidelines distributed privately by directors to potential grantees"><span class="letter">B</span><span class="option-text">Written guidelines distributed privately by directors to potential grantees</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="Verbal instructions only"><span class="letter">C</span><span class="option-text">Verbal instructions only</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q5" value="Not sure"><span class="letter">D</span><span class="option-text">Not sure</span></label>
     </div>
 
     <!-- Q6 -->
     <div class="question-card" data-q="6">
       <div class="q-number">6</div>
       <div class="q-text">Should we have a longer timeline for reviewing and responding to grant requests?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="A"><span class="letter">A</span><span class="option-text">Yes, at least a month</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="B"><span class="letter">B</span><span class="option-text">Yes, more than a month</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="C"><span class="letter">C</span><span class="option-text">No, our current timeline (~two weeks) is good</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="Yes, at least a month"><span class="letter">A</span><span class="option-text">Yes, at least a month</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="Yes, more than a month"><span class="letter">B</span><span class="option-text">Yes, more than a month</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q6" value="No, our current timeline (~two weeks) is good"><span class="letter">C</span><span class="option-text">No, our current timeline (~two weeks) is good</span></label>
     </div>
 
     <!-- Q7 -->
-    <div class="question-card" data-q="7">
+    <div class="question-card" data-q="7" data-type="checkbox">
       <div class="q-number">7</div>
-      <div class="q-text">In the future, should anyone besides family members be involved in the grant review process?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="A"><span class="letter">A</span><span class="option-text">No, family members only</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="B"><span class="letter">B</span><span class="option-text">Yes, staff and family</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="C"><span class="letter">C</span><span class="option-text">Yes, advisors or external consultants and family</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="D"><span class="letter">D</span><span class="option-text">Yes, both staff and advisors</span></label>
+      <div class="q-text">In the future, who besides family members should be involved in the grant review process?</div>
+      <div class="hint">Select all that apply.</div>
+      <label class="option checkbox" onclick="toggleCheckbox(this, event)"><input type="checkbox" name="q7" value="No one — family members only"><span class="letter">A</span><span class="option-text">No one — family members only</span></label>
+      <label class="option checkbox" onclick="toggleCheckbox(this, event)"><input type="checkbox" name="q7" value="Staff"><span class="letter">B</span><span class="option-text">Staff</span></label>
+      <label class="option checkbox" onclick="toggleCheckbox(this, event)"><input type="checkbox" name="q7" value="Advisors or external consultants"><span class="letter">C</span><span class="option-text">Advisors or external consultants</span></label>
+      <label class="option checkbox" onclick="toggleCheckbox(this, event)"><input type="checkbox" name="q7" value="Prefer not to say"><span class="letter">D</span><span class="option-text">Prefer not to say</span></label>
     </div>
 
     <!-- Q8 -->
     <div class="question-card" data-q="8">
       <div class="q-number">8</div>
       <div class="q-text">Should we require specific documentation from applicants (e.g., budgets, impact statements)?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="A"><span class="letter">A</span><span class="option-text">Yes, this would be helpful</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="B"><span class="letter">B</span><span class="option-text">This might be helpful, depending on the project</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="C"><span class="letter">C</span><span class="option-text">No, it's good to be flexible</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="Yes, this would be helpful"><span class="letter">A</span><span class="option-text">Yes, this would be helpful</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="This might be helpful, depending on the project"><span class="letter">B</span><span class="option-text">This might be helpful, depending on the project</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q8" value="No, it's good to be flexible"><span class="letter">C</span><span class="option-text">No, it's good to be flexible</span></label>
     </div>
 
     <!-- Q9 -->
     <div class="question-card" data-q="9">
       <div class="q-number">9</div>
       <div class="q-text">How should we communicate decisions to applicants?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="A"><span class="letter">A</span><span class="option-text">Formal letter or email</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="B"><span class="letter">B</span><span class="option-text">Phone call</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="C"><span class="letter">C</span><span class="option-text">In-person meeting</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="D"><span class="letter">D</span><span class="option-text">Other (please specify in Q12)</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="Formal letter or email"><span class="letter">A</span><span class="option-text">Formal letter or email</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="Phone call"><span class="letter">B</span><span class="option-text">Phone call</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="In-person meeting"><span class="letter">C</span><span class="option-text">In-person meeting</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q9" value="Other (please specify in Q12)"><span class="letter">D</span><span class="option-text">Other (please specify in Q12)</span></label>
     </div>
 
     <!-- Q10 -->
     <div class="question-card" data-q="10">
       <div class="q-number">10</div>
       <div class="q-text">Should we provide feedback to applicants whose proposals were not funded?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="A"><span class="letter">A</span><span class="option-text">Yes, written feedback from staff or secretary</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="B"><span class="letter">B</span><span class="option-text">Yes, brief verbal feedback from the interested director</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="C"><span class="letter">C</span><span class="option-text">Other (please specify in Q12)</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="Yes, written feedback"><span class="letter">A</span><span class="option-text">Yes, written feedback</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="Yes, brief verbal feedback from the interested director"><span class="letter">B</span><span class="option-text">Yes, brief verbal feedback from the interested director</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="No"><span class="letter">C</span><span class="option-text">No</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q10" value="Other (please specify in Q12)"><span class="letter">D</span><span class="option-text">Other (please specify in Q12)</span></label>
     </div>
 
     <!-- Q11 - Grantee Reports -->
     <div class="question-card" data-q="11">
       <div class="q-number">11</div>
       <div class="q-text">Should TAFF require grantees to provide follow-up reports on how funds were used?</div>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="A"><span class="letter">A</span><span class="option-text">Yes, detailed impact reports for all grants</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="B"><span class="letter">B</span><span class="option-text">Yes, but brief updates only (1 page or less)</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="C"><span class="letter">C</span><span class="option-text">Only for grants above a certain dollar amount</span></label>
-      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="D"><span class="letter">D</span><span class="option-text">No -- a trust-based approach is better for our relationships</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="Yes, detailed impact reports for all grants"><span class="letter">A</span><span class="option-text">Yes, detailed impact reports for all grants</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="Yes, but brief updates only (1 page or less)"><span class="letter">B</span><span class="option-text">Yes, but brief updates only (1 page or less)</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="Only for grants above a certain dollar amount"><span class="letter">C</span><span class="option-text">Only for grants above a certain dollar amount</span></label>
+      <label class="option" onclick="selectOption(this)"><input type="radio" name="q11" value="No -- a trust-based approach is better for our relationships"><span class="letter">D</span><span class="option-text">No -- a trust-based approach is better for our relationships</span></label>
     </div>
 
     <!-- Q12 - OPEN-ENDED -->
@@ -495,143 +375,113 @@
       <textarea name="q12_open" id="q12open" placeholder="Type your ideas here..."></textarea>
     </div>
 
-    <div class="validation-note" id="validationNote">Please answer all multiple-choice questions and enter your name before submitting.</div>
+    <!-- Honeypot anti-spam (hidden from humans) -->
+    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+    <!-- Subject line for the email Formspree sends -->
+    <input type="hidden" name="_subject" value="New TAFF Quiz Response">
+
+    <div class="validation-note" id="validationNote">Please answer all multiple-choice questions before submitting.</div>
 
     <div class="submit-section">
-      <button type="button" class="submit-btn" onclick="submitQuiz()">Submit My Responses</button>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit My Responses</button>
     </div>
+
+    <div class="anonymous-note">Your submission is fully anonymous. No name, email address, or identifying information is collected.</div>
 
     <div class="success-msg" id="successMsg">
       <h3>Thank you for your input!</h3>
-      <p>Your responses have been recorded. Use the options below to share them.</p>
-    </div>
-
-    <div class="copy-section" id="copySection">
-      <h3>Your Formatted Responses</h3>
-      <p>Copy the text below and paste it into an email, or click "Email Responses" to open your email client with everything pre-filled.</p>
-      <textarea id="responseSummary" readonly></textarea>
-      <button class="copy-btn" onclick="copyToClipboard()">Copy to Clipboard</button>
-      <a class="email-btn" id="emailLink" href="#">Email Responses</a>
+      <p>Your responses have been recorded anonymously. We appreciate your time.</p>
     </div>
 
   </form>
 </div>
 
 <script>
-const TOTAL_QUESTIONS = 12;
-const RECIPIENT_EMAIL = "dorothy@pilgrimafrica.org";
+const form = document.getElementById('quizForm');
+const submitBtn = document.getElementById('submitBtn');
+const validationNote = document.getElementById('validationNote');
+const successMsg = document.getElementById('successMsg');
 
-const questionTexts = {
-  q1: "Which part of our grantmaking activities at TAFF do you appreciate participating in the MOST?",
-  q2: "Which part of our grantmaking activities at TAFF do you appreciate participating in the SECOND MOST?",
-  q3: "Do you wish that TAFF had a narrower focus on specific topic areas, or do you prefer grantmaking flexibility?",
-  q4: "Would formalizing our special grant submission process help us achieve greater impact or transparency?",
-  q5: "What's the most appropriate form of guidelines for special grants?",
-  q6: "Should we have a longer timeline for reviewing and responding to grant requests?",
-  q7: "In the future, should anyone besides family members be involved in the grant review process?",
-  q8: "Should we require specific documentation from applicants?",
-  q9: "How should we communicate decisions to applicants?",
-  q10: "Should we provide feedback to applicants whose proposals were not funded?",
-  q11: "Should TAFF require grantees to provide follow-up reports on how funds were used?",
-  q12: "What other suggestions do you have to improve TAFF (crazy is fine)?"
-};
-
-const optionTexts = {
-  q1:  { A: "Personal authority grants", B: "Matching grants", C: "Special grants", D: "Recurrent grants", E: "Group grants" },
-  q2:  { A: "Personal authority grants", B: "Matching grants", C: "Special grants", D: "Recurrent grants", E: "Group grants" },
-  q3:  { A: "Prefer more intentional, streamlined focus", B: "Love current mix", C: "Would express this differently" },
-  q4:  { A: "Yes", B: "No", C: "Not sure" },
-  q5:  { A: "Written guidelines available to the public", B: "Written guidelines distributed privately", C: "Verbal instructions only" },
-  q6:  { A: "Yes, at least a month", B: "Yes, more than a month", C: "No, current timeline is good" },
-  q7:  { A: "No, family members only", B: "Yes, staff and family", C: "Yes, advisors/consultants and family", D: "Yes, both staff and advisors" },
-  q8:  { A: "Yes, this would be helpful", B: "Depends on the project", C: "No, stay flexible" },
-  q9:  { A: "Formal letter or email", B: "Phone call", C: "In-person meeting", D: "Other" },
-  q10: { A: "Yes, written feedback from staff", B: "Yes, brief verbal feedback from director", C: "Other" },
-  q11: { A: "Detailed impact reports for all grants", B: "Brief updates only", C: "Only for grants above a threshold", D: "No, trust-based approach" },
-};
-
+// Handle radio option selection (visual styling)
 function selectOption(label) {
   const card = label.closest('.question-card');
   card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   label.classList.add('selected');
   label.querySelector('input').checked = true;
-  updateProgress();
 }
 
-function updateProgress() {
-  let answered = 0;
-  for (let i = 1; i <= 11; i++) {
-    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+// Handle checkbox option toggle (visual styling + allows multiple)
+function toggleCheckbox(label, event) {
+  // If the user clicked directly on the input (native checkbox), don't toggle again
+  if (event && event.target.tagName === 'INPUT') {
+    label.classList.toggle('selected', label.querySelector('input').checked);
+    return;
   }
-  if (document.getElementById('q12open').value.trim()) answered++;
-
-  document.getElementById('progressText').textContent = `${answered} of ${TOTAL_QUESTIONS}`;
-  document.getElementById('progressFill').style.width = `${(answered / TOTAL_QUESTIONS) * 100}%`;
+  event && event.preventDefault();
+  const input = label.querySelector('input');
+  input.checked = !input.checked;
+  label.classList.toggle('selected', input.checked);
 }
 
-document.getElementById('q12open').addEventListener('input', updateProgress);
+// Submit handler
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  validationNote.style.display = 'none';
 
-function submitQuiz() {
-  const name = document.getElementById('responderName').value.trim();
-
-  // Validate
+  // Validate: all 11 multiple-choice questions must be answered
+  // Q1-Q6, Q8-Q11 are radios; Q7 is a checkbox group (needs at least one checked)
   let allAnswered = true;
-  for (let i = 1; i <= 11; i++) {
+  const radioQuestions = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11];
+  for (const i of radioQuestions) {
     if (!document.querySelector(`input[name="q${i}"]:checked`)) {
       allAnswered = false;
       break;
     }
   }
+  if (allAnswered) {
+    const q7Checked = document.querySelectorAll('input[name="q7"]:checked');
+    if (q7Checked.length === 0) allAnswered = false;
+  }
 
-  if (!allAnswered || !name) {
-    document.getElementById('validationNote').style.display = 'block';
+  if (!allAnswered) {
+    validationNote.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
-  document.getElementById('validationNote').style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
 
-  // Build summary
-  let summary = `TAFF SUBMISSION PROCESS QUIZ\nResponses from: ${name}\nDate: ${new Date().toLocaleDateString()}\n`;
-  summary += "=".repeat(50) + "\n\n";
+  try {
+    const formData = new FormData(form);
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
 
-  for (let i = 1; i <= 11; i++) {
-    const val = document.querySelector(`input[name="q${i}"]:checked`).value;
-    summary += `Q${i}. ${questionTexts["q" + i]}\n`;
-    summary += `   Answer: ${val}. ${optionTexts["q" + i][val]}\n\n`;
+    if (response.ok) {
+      form.querySelectorAll('.question-card, .submit-section, .anonymous-note, .validation-note').forEach(el => {
+        el.style.display = 'none';
+      });
+      successMsg.style.display = 'block';
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      const data = await response.json().catch(() => ({}));
+      const msg = (data && data.errors && data.errors.map(e => e.message).join(', ')) || 'Something went wrong. Please try again.';
+      validationNote.textContent = msg;
+      validationNote.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit My Responses';
+    }
+  } catch (err) {
+    validationNote.textContent = 'Network error. Please check your connection and try again.';
+    validationNote.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit My Responses';
   }
-
-  const openEnded = document.getElementById('q12open').value.trim() || "(No response)";
-  summary += `Q12. ${questionTexts.q12}\n`;
-  summary += `   Answer: ${openEnded}\n`;
-
-  document.getElementById('responseSummary').value = summary;
-  document.getElementById('successMsg').style.display = 'block';
-  document.getElementById('copySection').style.display = 'block';
-
-  // Build email link
-  const subject = encodeURIComponent(`TAFF Quiz Responses - ${name}`);
-  const body = encodeURIComponent(summary);
-  document.getElementById('emailLink').href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
-
-  // Disable form
-  document.querySelectorAll('.option input, .submit-btn').forEach(el => el.disabled = true);
-  document.querySelector('.submit-btn').textContent = "Submitted";
-  document.getElementById('q12open').disabled = true;
-  document.getElementById('progressFill').style.width = '100%';
-  document.getElementById('progressText').textContent = 'Complete!';
-
-  document.getElementById('successMsg').scrollIntoView({ behavior: 'smooth' });
-}
-
-function copyToClipboard() {
-  const textarea = document.getElementById('responseSummary');
-  textarea.select();
-  document.execCommand('copy');
-  const btn = document.querySelector('.copy-btn');
-  btn.textContent = 'Copied!';
-  setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
-}
+});
 </script>
 </body>
 </html>
